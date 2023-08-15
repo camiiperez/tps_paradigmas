@@ -1,4 +1,4 @@
-module Link ( Link(..), newL,connectsL,linksL,capacityL,delayL,cityNamesInLinks) where
+module Link ( Link(..), newL,connectsL,linksL,capacityL,delayL,cityNamesInLinks,citiesTypeInLinks) where
 
 import Point
 import City
@@ -11,6 +11,10 @@ newL city1 city2 quality = Lin city1 city2 quality
 
 cityNamesInLinks :: Link -> [String]
 cityNamesInLinks (Lin city1 city2 quality) = [nameC(city1),nameC(city2)] 
+
+citiesTypeInLinks :: Link -> [City]
+citiesTypeInLinks (Lin city1 city2 quality) = [city1,city2] 
+
 
 connectsL :: City -> Link -> Bool   -- indica si esta ciudad es parte de este link
 connectsL city link = elem (nameC(city)) (cityNamesInLinks(link))
