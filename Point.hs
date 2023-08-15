@@ -1,4 +1,4 @@
-module Point ( Point, newP, difP)
+module Point ( Point(Poi), newP, difP)
    where
 
 data Point = Poi Int Int deriving (Eq, Show)
@@ -6,11 +6,8 @@ data Point = Poi Int Int deriving (Eq, Show)
 newP :: Int -> Int -> Point
 newP x y = Poi x y
 
-diferenciaEnX :: Point -> Point -> Float
-diferenciaEnX (Poi x y) (Poi x' y') = abs(fromIntegral (x - x'))
-
-diferenciaEnY :: Point -> Point -> Float
-diferenciaEnY (Poi x y) (Poi x' y') = abs(fromIntegral (y - y'))
-
 difP :: Point -> Point -> Float  -- distancia absoluta
-difP (Poi x y) (Poi x' y') = sqrt((diferenciaEnX (Poi x y) (Poi x' y'))**2 + (diferenciaEnY (Poi x y) (Poi x' y'))** 2)
+difP (Poi x y) (Poi x' y') = sqrt((fromIntegral(x-x'))**2 + (fromIntegral(y-y'))** 2)
+
+punto1 = (Poi 2 3) 
+punto2 = (Poi 4 5)

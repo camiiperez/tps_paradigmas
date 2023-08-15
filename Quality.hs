@@ -1,4 +1,4 @@
-module Quality ( Quality(..), newQ, capacityQ,delayQ ) where
+module Quality ( Quality(Qua), newQ, capacityQ,delayQ ) where
 
 import Point
 import City

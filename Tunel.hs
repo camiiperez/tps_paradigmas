@@ -1,4 +1,4 @@
-module Tunel ( Tunel, newT, {-connectsT, usesT, delayT-} )
+module Tunel ( Tunel, newT, connectsT, usesT, {-delayT-} )
    where
 
 import Point
