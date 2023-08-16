@@ -1,4 +1,4 @@
-module Tunel ( Tunel, newT{-, connectsT, usesT, delayT-})
+module Tunel ( Tunel, newT, connectsT, usesT, delayT)
    where
 
 import Point
@@ -10,13 +10,6 @@ data Tunel = Tun [Link] deriving (Eq, Show)
 
 newT :: [Link] -> Tunel
 newT linksList = Tun linksList
-  
---citiesInTunels :: Tunel -> [String]
---citiesInTunels (Tun [link1,link2]) = (cityNamesInLinks(link1) ++ cityNamesInLinks(link2))
-
-
---areCitiesInTunnel :: [City] -> Tunel -> Bool
---areCitiesInTunnel [city1,city2] tunel = (elem (nameC(city1)) (citiesInTunels(tunel))) && (elem (nameC(city2)) (citiesInTunels(tunel)))  
 ---
 
 primerLink :: [Link] -> Link
