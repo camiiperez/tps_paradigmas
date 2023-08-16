@@ -1,4 +1,4 @@
-module City (City(Cit), newC,nameC) where
+module City (City(), newC,nameC,distanceC) where
 
 import Point
 
@@ -11,7 +11,7 @@ nameC :: City -> String
 nameC (Cit str point) = str
 
 distanceC :: City -> City -> Float
-distanceC (Cit (str) (Poi x y)) (Cit (str') (Poi x' y')) = difP (Poi x y) (Poi x' y')
+distanceC (Cit str point) (Cit str' point') = difP (point) (point')
 
 bsas = newC "Buenos Aires" (newP 5 4)
 mtz = newC "Martinez" (newP 1 2)

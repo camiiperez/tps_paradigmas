@@ -1,4 +1,4 @@
-module Tunel ( Tunel, newT, connectsT, usesT, {-delayT-} )
+module Tunel ( Tunel, newT{-, connectsT, usesT, delayT-})
    where
 
 import Point
@@ -11,22 +11,35 @@ data Tunel = Tun [Link] deriving (Eq, Show)
 newT :: [Link] -> Tunel
 newT linksList = Tun linksList
   
-citiesInTunels :: Tunel -> [String]
-citiesInTunels (Tun [link1,link2]) = (cityNamesInLinks(link1) ++ cityNamesInLinks(link2))
+--citiesInTunels :: Tunel -> [String]
+--citiesInTunels (Tun [link1,link2]) = (cityNamesInLinks(link1) ++ cityNamesInLinks(link2))
+
+
+--areCitiesInTunnel :: [City] -> Tunel -> Bool
+--areCitiesInTunnel [city1,city2] tunel = (elem (nameC(city1)) (citiesInTunels(tunel))) && (elem (nameC(city2)) (citiesInTunels(tunel)))  
+---
+
+primerLink :: [Link] -> Link
+primerLink linksList = (!!) linksList 0
+
+ultimoLink :: [Link] -> Link
+ultimoLink linksList = (!!) linksList (length(linksList) - 1)
+
+---
 
 connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conceta estas dos ciudades distintas
-connectsT city1 city2 tunel = (elem (nameC(city1)) (citiesInTunels(tunel))) && (elem (nameC(city2)) (citiesInTunels(tunel)))
-
-areCitiesInTunnel :: [City] -> Tunel -> Bool
-areCitiesInTunnel [city1,city2] tunel = (elem (nameC(city1)) (citiesInTunels(tunel))) && (elem (nameC(city2)) (citiesInTunels(tunel)))  
+connectsT city1 city2 (Tun linksList) =  (connectsL (city1) (primerLink(linksList))) && ((connectsL (city2) (ultimoLink(linksList))))
 
 
 usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link
-usesT link tunel = areCitiesInTunnel (citiesTypeInLinks(link)) tunel
+usesT link (Tun linksList) = elem link linksList
 
-{-
+delaySum :: [Float] -> Float
+delaySum [] = 0
+delaySum (x:xs) = x + delaySum(xs)
+
 delayT :: Tunel -> Float -- la demora que sufre una conexion en este tunel
--}
+delayT (Tun linksList) = delaySum ([delayL(x) | x <- linksList])
 
 --Cities
 olivos = newC "Olivos" (newP 5 4)
@@ -44,3 +57,7 @@ otroMunicipio = newL berazategui munro cableNormal
 provincia = newL merlo sanluis cableNormal
 --Tuneles
 tunelLaNoria= newT [sanIsidro,otroMunicipio]
+tunelAvellaneda = newT [sanIsidro, otroMunicipio, provincia]
+--Pruebas
+listaDeLinks = [sanIsidro,otroMunicipio,provincia]
+--(!!) listaDeLinks 0 
