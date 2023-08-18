@@ -37,8 +37,19 @@ connectedR (Reg cities links tunels) city1 city2 = foldr (||) False (map (connec
 linkedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan enlazadas
 linkedR (Reg cities links tunels) city1 city2 = foldr (||) False (map (linksL city1 city2) links)
 
-{-
+getConnectedTunels :: City -> City -> [Tunel] -> [Tunel]
+getConnectedTunels city1 city2 tunels = foldr accumulate [] tunels
+    where accumulate tunel acc = if connectsT city1 city2 tunel then tunel : acc else acc
+
+getTunelInsideList :: [Tunel] -> Tunel
+getTunelInsideList [tunel] = tunel
+
+
 delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indica la demora
+delayR (Reg cities links tunels) city1 city2 = if (foldr (||) False (map (connectsT city1 city2) tunels)) then  delayT(getTunelInsideList(getConnectedTunels city1 city2 tunels)) else error "Las ciudades no estan conectadas"
+
+
+{-
 availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
 -}
 
