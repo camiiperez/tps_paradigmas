@@ -6,12 +6,10 @@ import Quality
 import Link
 import Tunel
 
---LA PARTE DEL DERIVING NO ESTA EN EL ENUNCIADO, SACAR
 data Region = Reg [City] [Link] [Tunel] deriving(Show)
---LA PARTE DEL DERIVING NO ESTA EN EL ENUNCIADO, SACAR
 
 newR :: Region
-newR = Reg [olivos,mtz,berazategui,munro] [sanIsidro,otroMunicipio] [tunelLaNoria]
+newR = Reg [olivos,mtz,berazategui,munro,merlo,sanluis] [sanIsidro,otroMunicipio,provincia] [tunelLaNoria,tunelAvellaneda,tunelB,tunelC,tunelD]
 
 bindCities :: [City] -> [City] -> [City]
 bindCities city1 city2 = city1 ++ city2
@@ -28,6 +26,7 @@ linkR (Reg cities links tunels) city1 city2 quality = Reg cities (bindLinks[newL
 
 {-
 tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
+tunelR (Reg cities links tunels) citiesList = Reg
 -}
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
@@ -48,10 +47,19 @@ getTunelInsideList [tunel] = tunel
 delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indica la demora
 delayR (Reg cities links tunels) city1 city2 = if (foldr (||) False (map (connectsT city1 city2) tunels)) then  delayT(getTunelInsideList(getConnectedTunels city1 city2 tunels)) else error "Las ciudades no estan conectadas"
 
+howManyLinksInTunel :: [Tunel] -> Link -> Int
+howManyLinksInTunel tunelsList link = sum (map (\tunnel -> if usesT link tunnel then 1 else 0) tunelsList)  
 
-{-
+whichLinkConnects :: City -> City -> [Link] -> Link
+whichLinkConnects city1 city2 linksList = head [link | link <- linksList, linksL city1 city2 link]
+
+
+
 availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
--}
+availableCapacityForR (Reg cities links tunels) city1 city2 = if (foldr (||) False (map (linksL city1 city2) links))
+    then (capacityL (whichLinkConnects city1 city2 links) ) - (howManyLinksInTunel tunels (whichLinkConnects city1 city2 links)) 
+    else error "Las ciudades no estan enlazadas (por un link), o no hay mas capacidad"
+
 
 --Cities
 olivos = newC "Olivos" (newP 5 4)
@@ -70,6 +78,9 @@ provincia = newL merlo sanluis cableNormal
 --Tuneles
 tunelLaNoria= newT [sanIsidro,otroMunicipio]
 tunelAvellaneda = newT [sanIsidro, otroMunicipio, provincia]
+tunelB = newT [sanIsidro,provincia,otroMunicipio]
+tunelC = newT [sanIsidro,provincia,otroMunicipio]
+tunelD = newT [sanIsidro,otroMunicipio]
 --Regions
 --newR = Reg [olivos,mtz] [sanIsidro,otroMunicipio] [tunelLaNoria]
 --nuevoR = foundR newR berazategui
