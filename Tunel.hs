@@ -8,6 +8,8 @@ import Link
 
 data Tunel = Tun [Link] deriving (Eq, Show)
 
+
+
 newT :: [Link] -> Tunel
 newT linksList = Tun linksList
 ---
@@ -19,9 +21,14 @@ ultimoLink :: [Link] -> Link
 ultimoLink linksList = (!!) linksList (length(linksList) - 1)
 
 ---
+esExtremo :: [Link] -> City -> Bool
+esExtremo linksList city 
+   |length([link | link <- linksList, connectsL city link]) > 1 = False
+   |otherwise = True
+
 
 connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conceta estas dos ciudades distintas
-connectsT city1 city2 (Tun linksList) =  (connectsL (city1) (primerLink(linksList))) && ((connectsL (city2) (ultimoLink(linksList))))
+connectsT city1 city2 (Tun linksList) =  (esExtremo linksList city1) && (esExtremo linksList city2)
 
 
 usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link
@@ -46,8 +53,8 @@ fibraOptica = newQ "Fibra Optica" 4 22.3
 cableNormal = newQ "Cable" 2 15.4
 --Links
 sanIsidro = newL olivos mtz fibraOptica
-otroMunicipio = newL berazategui munro cableNormal
-provincia = newL merlo sanluis cableNormal
+otroMunicipio = newL mtz munro cableNormal
+provincia = newL munro berazategui cableNormal
 --Tuneles
 tunelLaNoria= newT [sanIsidro,otroMunicipio]
 tunelAvellaneda = newT [sanIsidro, otroMunicipio, provincia]

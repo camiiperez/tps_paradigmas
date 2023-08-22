@@ -1,4 +1,4 @@
-module Link ( Link(), newL,linksL,connectsL,capacityL,delayL) where
+module Link ( Link, newL,linksL,connectsL,capacityL,delayL) where
 
 import Point
 import City
