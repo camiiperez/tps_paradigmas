@@ -1,4 +1,4 @@
-module Region ( Region, newR{- foundR, linkR, tunelR, pathR, linksForR, connectedR, linkedR, delayR, availableCapacityForR, usedCapacityForR-} )
+module Region ( Region, newR,foundR, linkR, tunelR,connectedR, linkedR, delayR, availableCapacityForR)
    where
 import Point
 import City
@@ -9,29 +9,20 @@ import Tunel
 data Region = Reg [City] [Link] [Tunel] deriving(Show)
 
 newR :: Region
-newR = Reg [olivos,mtz,berazategui,munro,merlo,sanluis] [sanIsidro,otroMunicipio,provincia] []
+newR = Reg [] [] []
 
-bindCities :: [City] -> [City] -> [City]
-bindCities city1 city2 = city1 ++ city2
+foundR :: Region -> City -> Region
+foundR (Reg cities links tunels) city = (Reg (cities ++ [city]) links tunels)
 
-bindLinks :: [Link] -> [Link] -> [Link]
-bindLinks links1 links2 = links1 ++ links2
-
-foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
-foundR (Reg cities links tunels) city = (Reg (bindCities cities [city] ) links tunels)
-
-
-linkR :: Region -> City -> City -> Quality -> Region -- enlaza dos ciudades de la región con un enlace de la calidad indicada
-linkR (Reg cities links tunels) city1 city2 quality = Reg cities (bindLinks[newL city1 city2 quality] links) tunels
-
-
+linkR :: Region -> City -> City -> Quality -> Region 
+linkR (Reg cities links tunels) city1 city2 quality = Reg cities ([newL city1 city2 quality] ++ links) tunels
 
 filtraLink :: [Link] -> City -> City -> Link
 filtraLink linksList city1 city2 = head [link | link <- linksList, linksL city1 city2 link]
 
 primerosDos :: [a] -> [a]
 primerosDos (x:y:_) = [x, y]
-primerosDos _ = []  -- Manejar el caso de listas con menos de dos elementos
+primerosDos _ = []  
 
 obtenerParesDeCiudades :: [City] -> [City]
 obtenerParesDeCiudades citiesList = primerosDos citiesList
@@ -76,26 +67,3 @@ availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad di
 availableCapacityForR (Reg cities links tunels) city1 city2 = if (foldr (||) False (map (linksL city1 city2) links)) && ((capacityL (whichLinkConnects city1 city2 links) ) - (capacidadUtilizada tunels (whichLinkConnects city1 city2 links)) > 0)
     then (capacityL (whichLinkConnects city1 city2 links) ) - (capacidadUtilizada tunels (whichLinkConnects city1 city2 links)) 
     else error "Las ciudades no estan enlazadas (por un link), o no hay mas capacidad"
-
-
---Cities
-olivos = newC "Olivos" (newP 5 4)
-mtz = newC "Martinez" (newP 1 2)
-berazategui = newC "Berazategui" (newP 8 4)
-munro = newC "Munro" (newP 5 6)
-merlo = newC "Merlo" (newP 19 8)
-sanluis = newC "San Luis" (newP 15 9)
-ciudadExtra = newC "Extra City" (newP 20 5)
---Qualities
-fibraOptica = newQ "Fibra Optica" 4 22.3
-cableNormal = newQ "Cable" 2 15.4
---Links
-sanIsidro = newL olivos mtz fibraOptica
-otroMunicipio = newL mtz munro cableNormal
-provincia = newL munro berazategui cableNormal
---Tuneles
-tunelLaNoria= newT [sanIsidro,otroMunicipio]
-tunelAvellaneda = newT [sanIsidro, otroMunicipio, provincia]
---Regions
---newR = Reg [olivos,mtz] [sanIsidro,otroMunicipio] [tunelLaNoria]
---nuevoR = foundR newR berazategui
