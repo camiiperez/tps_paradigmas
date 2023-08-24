@@ -88,12 +88,24 @@ zonaNorte = newR
 
 foundOlivos = foundR zonaNorte olivos
 foundMartinez = foundR foundOlivos martinez
+foundLaLucila = foundR foundMartinez laLucila
 
-linkOlivosMartinez' = linkR foundMartinez olivos martinez cableFibraOptica
+linkOlivosMartinez' = linkR foundLaLucila olivos martinez cableFibraOptica
+linkMartinezLaLucila' = linkR linkOlivosMartinez' martinez laLucila cableCoaxial
 
+tunelOlivosLaLucila = tunelR linkMartinezLaLucila' [olivos,martinez,laLucila]
 
+olivosLaLucilaConnectedR = connectedR tunelOlivosLaLucila olivos laLucila
+olivosMartinezNotConnectedR = connectedR tunelOlivosLaLucila olivos martinez 
+martinezMartinezExcept' = connectedR tunelOlivosLaLucila martinez martinez
 
+olivosMartinezLinkedR = linkedR tunelOlivosLaLucila olivos martinez
+olivosLaLucilaNotLinkedR = linkedR tunelOlivosLaLucila olivos laLucila
 
+olivosLaLucilaDelayR = delayR tunelOlivosLaLucila olivos laLucila
+olivosMartinezDelayExcept = delayR tunelOlivosLaLucila olivos martinez
+
+olivosMartinezAvCapac = availableCapacityForR tunelOlivosLaLucila olivos martinez
 
 
 
