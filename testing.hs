@@ -70,11 +70,14 @@ martinezLaLucilaDelay = delayL linkMartinezLaLucila
 -- Modulo Tunel --
 tunelMitre = newT [linkOlivosMartinez,linkMartinezLaLucila,linkLaLucilaBeccar]
 tunelRetiro = newT [linkLaLucilaBeccar,linkBeccarVicenteL]
+tunelSolitario = newT [linkOlivosMartinez]
 
 olivosBeccarConnected = connectsT olivos beccar tunelMitre
 beccarOlivosConnected = connectsT beccar olivos tunelMitre
 olivosLaLucilaNotConnected = connectsT olivos laLucila tunelMitre
 laLucilaBeccarNotConnected = connectsT laLucila beccar tunelRetiro
+olivosMartinezConnected = connectsT olivos martinez tunelSolitario
+martinezOlivosConnected = connectsT martinez olivos tunelSolitario
 
 tunelMitreUsesLink = usesT linkOlivosMartinez tunelMitre
 tunelMitreNotUsesLink = usesT linkBeccarVicenteL tunelMitre
@@ -89,14 +92,17 @@ zonaNorte = newR
 foundOlivos = foundR zonaNorte olivos
 foundMartinez = foundR foundOlivos martinez
 foundLaLucila = foundR foundMartinez laLucila
+foundBeccar = foundR foundLaLucila beccar
 
-linkOlivosMartinez' = linkR foundLaLucila olivos martinez cableFibraOptica
+linkOlivosMartinez' = linkR foundBeccar olivos martinez cableFibraOptica
 linkMartinezLaLucila' = linkR linkOlivosMartinez' martinez laLucila cableCoaxial
 
 tunelOlivosLaLucila = tunelR linkMartinezLaLucila' [olivos,martinez,laLucila]
+tunelOlivosMartinez = tunelR tunelOlivosLaLucila [olivos,martinez]
 
-olivosLaLucilaConnectedR = connectedR tunelOlivosLaLucila olivos laLucila
-olivosMartinezNotConnectedR = connectedR tunelOlivosLaLucila olivos martinez 
+olivosLaLucilaConnectedR = connectedR tunelOlivosMartinez olivos laLucila
+olivosBeccarNotConnectedR = connectedR tunelOlivosMartinez olivos beccar 
+martinezBeccarNotConnectedR = connectedR tunelOlivosMartinez martinez beccar
 martinezMartinezExcept' = connectedR tunelOlivosLaLucila martinez martinez
 
 olivosMartinezLinkedR = linkedR tunelOlivosLaLucila olivos martinez
@@ -106,6 +112,7 @@ olivosLaLucilaDelayR = delayR tunelOlivosLaLucila olivos laLucila
 olivosMartinezDelayExcept = delayR tunelOlivosLaLucila olivos martinez
 
 olivosMartinezAvCapac = availableCapacityForR tunelOlivosLaLucila olivos martinez
+-------------------
 
 
 

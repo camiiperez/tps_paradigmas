@@ -41,8 +41,10 @@ obtieneLinks (x:xs) linkList
                                           
 
 tunelR :: Region -> [City] -> Region 
-tunelR (Reg cities links tunels) citiesList = (Reg cities links (tunels ++ [(newT (obtieneLinks citiesList links))]) )
-
+tunelR (Reg cities links tunels) citiesList 
+        | (length(citiesList) > 2) =  (Reg cities links (tunels ++ [(newT (obtieneLinks citiesList links))]) )
+        | (length(citiesList) == 2) = (Reg cities links (tunels ++ [(newT [linkThatConnects links (head(citiesList)) (head(tail(citiesList)))])]))
+        | otherwise = error "No se puede crear un tunel con una sola ciudad"
 
 connectedR :: Region -> City -> City -> Bool 
 connectedR (Reg cities links tunels) city1 city2 
@@ -62,7 +64,7 @@ getTunelInsideList [tunel] = tunel
 areConnectedByT :: City -> City -> [Tunel] -> Bool
 areConnectedByT city1 city2 tunelsList = (foldr (||) False (map(connectsT city1 city2) tunelsList))
 
-delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indica la demora
+delayR :: Region -> City -> City -> Float 
 delayR (Reg cities links tunels) city1 city2 
     | areConnectedByT city1 city2 tunels = delayT(head(getConnectedTunels city1 city2 tunels))
     | otherwise = error "Las ciudades no estan conectadas"
@@ -76,7 +78,7 @@ whichLinkConnects city1 city2 linksList = head [link | link <- linksList, linksL
 existsLwCapacity :: City -> City -> [Link] -> [Tunel] -> Bool
 existsLwCapacity city1 city2 links tunels = (foldr (||) False (map (linksL city1 city2) links)) && ((capacityL (whichLinkConnects city1 city2 links) ) - (capacidadUtilizada tunels (whichLinkConnects city1 city2 links)) > 0)
 
-availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
+availableCapacityForR :: Region -> City -> City -> Int 
 availableCapacityForR (Reg cities links tunels) city1 city2 
         | existsLwCapacity city1 city2 links tunels = (capacityL (whichLinkConnects city1 city2 links) ) - (capacidadUtilizada tunels (whichLinkConnects city1 city2 links)) 
         | otherwise = error "Las ciudades no estan enlazadas (por un link), o no hay mas capacidad"

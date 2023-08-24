@@ -11,9 +11,12 @@ data Tunel = Tun [Link] deriving (Eq, Show)
 newT :: [Link] -> Tunel
 newT linksList = Tun linksList
 
+linksThatConnect :: City -> [Link] -> [Link]
+linksThatConnect city linksList = [link | link <- linksList, connectsL city link]
+
 esExtremo :: [Link] -> City -> Bool
 esExtremo linksList city 
-   |length([link | link <- linksList, connectsL city link]) > 1 = False
+   |(length(linksThatConnect city linksList) > 1) || (length(linksThatConnect city linksList) == 0)  = False
    |otherwise = True
 
 connectsT :: City -> City -> Tunel -> Bool 
