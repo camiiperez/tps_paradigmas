@@ -71,6 +71,7 @@ martinezLaLucilaDelay = delayL linkMartinezLaLucila
 tunelMitre = newT [linkOlivosMartinez,linkMartinezLaLucila,linkLaLucilaBeccar]
 tunelRetiro = newT [linkLaLucilaBeccar,linkBeccarVicenteL]
 tunelSolitario = newT [linkOlivosMartinez]
+tunelRandomCapacityExceeded = newT [linkMartinezLaLucila,linkMartinezLaLucila,linkMartinezLaLucila,linkMartinezLaLucila]
 
 olivosBeccarConnected = connectsT olivos beccar tunelMitre
 beccarOlivosConnected = connectsT beccar olivos tunelMitre

@@ -11,7 +11,6 @@ data Region = Reg [City] [Link] [Tunel] deriving(Show)
 newR :: Region
 newR = Reg [] [] []
 
-
 foundR :: Region -> City -> Region
 foundR (Reg cities links tunels) city = (Reg (cities ++ [city]) links tunels)
 
@@ -21,18 +20,18 @@ linkR (Reg cities links tunels) city1 city2 quality = Reg cities ([newL city1 ci
 linkThatConnects :: [Link] -> City -> City -> Link
 linkThatConnects linksList city1 city2 = head [link | link <- linksList, linksL city1 city2 link]
 
-primerosDos :: [a] -> [a]
-primerosDos (x:y:_) = [x, y]
-primerosDos _ = []  
+firstTwo :: [a] -> [a]
+firstTwo (x:y:_) = [x, y]
+firstTwo _ = []  
 
 obtenerParesDeCiudades :: [City] -> [City]
-obtenerParesDeCiudades citiesList = primerosDos citiesList
+obtenerParesDeCiudades citiesList = firstTwo citiesList
 
 firstCity :: [City] -> City
-firstCity citiesList = (head (primerosDos citiesList))
+firstCity citiesList = (head (firstTwo citiesList))
 
 secondCity :: [City] -> City
-secondCity citiesList = (head(tail(primerosDos citiesList)))
+secondCity citiesList = (head(tail(firstTwo citiesList)))
 
 obtieneLinks :: [City] -> [Link] -> [Link]
 obtieneLinks (x:xs) linkList 
@@ -58,9 +57,6 @@ getConnectedTunels :: City -> City -> [Tunel] -> [Tunel]
 getConnectedTunels city1 city2 tunels = foldr accumulate [] tunels
     where accumulate tunel acc = if connectsT city1 city2 tunel then tunel : acc else acc
 
-getTunelInsideList :: [Tunel] -> Tunel
-getTunelInsideList [tunel] = tunel
-
 areConnectedByT :: City -> City -> [Tunel] -> Bool
 areConnectedByT city1 city2 tunelsList = (foldr (||) False (map(connectsT city1 city2) tunelsList))
 
@@ -69,16 +65,16 @@ delayR (Reg cities links tunels) city1 city2
     | areConnectedByT city1 city2 tunels = delayT(head(getConnectedTunels city1 city2 tunels))
     | otherwise = error "Las ciudades no estan conectadas"
 
-capacidadUtilizada :: [Tunel] -> Link -> Int
-capacidadUtilizada tunelsList link = sum (map (\tunnel -> if usesT link tunnel then 1 else 0) tunelsList)  
+usedCapacityR :: [Tunel] -> Link -> Int
+usedCapacityR tunelsList link = sum (map (\tunnel -> if usesT link tunnel then 1 else 0) tunelsList)  
 
 whichLinkConnects :: City -> City -> [Link] -> Link
 whichLinkConnects city1 city2 linksList = head [link | link <- linksList, linksL city1 city2 link]
 
 existsLwCapacity :: City -> City -> [Link] -> [Tunel] -> Bool
-existsLwCapacity city1 city2 links tunels = (foldr (||) False (map (linksL city1 city2) links)) && ((capacityL (whichLinkConnects city1 city2 links) ) - (capacidadUtilizada tunels (whichLinkConnects city1 city2 links)) > 0)
+existsLwCapacity city1 city2 links tunels = (foldr (||) False (map (linksL city1 city2) links)) && ((capacityL (whichLinkConnects city1 city2 links) ) - (usedCapacityR tunels (whichLinkConnects city1 city2 links)) > 0)
 
 availableCapacityForR :: Region -> City -> City -> Int 
 availableCapacityForR (Reg cities links tunels) city1 city2 
-        | existsLwCapacity city1 city2 links tunels = (capacityL (whichLinkConnects city1 city2 links) ) - (capacidadUtilizada tunels (whichLinkConnects city1 city2 links)) 
+        | existsLwCapacity city1 city2 links tunels = (capacityL (whichLinkConnects city1 city2 links) ) - (usedCapacityR tunels (whichLinkConnects city1 city2 links)) 
         | otherwise = error "Las ciudades no estan enlazadas (por un link), o no hay mas capacidad"
