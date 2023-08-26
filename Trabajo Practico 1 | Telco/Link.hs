@@ -26,4 +26,4 @@ capacityL :: Link -> Int
 capacityL (Lin city1 city2 quality) = capacityQ(quality)
 
 delayL :: Link -> Float
-delayL (Lin city1 city2 quality) = delayQ(quality)
+delayL (Lin city1 city2 quality) = distanceC city1 city2 * delayQ(quality)

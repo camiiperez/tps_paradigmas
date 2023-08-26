@@ -71,10 +71,20 @@ usedCapacityR tunelsList link = sum (map (\tunnel -> if usesT link tunnel then 1
 whichLinkConnects :: City -> City -> [Link] -> Link
 whichLinkConnects city1 city2 linksList = head [link | link <- linksList, linksL city1 city2 link]
 
+availableCapacityForLink :: City -> City -> [Link] -> [Tunel] -> Int
+availableCapacityForLink city1 city2 linksList tunels = 
+        (capacityL (whichLinkConnects city1 city2 linksList) ) - (usedCapacityR tunels (whichLinkConnects city1 city2 linksList))
+
+areCitiesLinked :: City -> City -> [Link] -> Bool
+areCitiesLinked city1 city2 linksList = (foldr (||) False (map (linksL city1 city2) linksList))
+
 existsLwCapacity :: City -> City -> [Link] -> [Tunel] -> Bool
-existsLwCapacity city1 city2 links tunels = (foldr (||) False (map (linksL city1 city2) links)) && ((capacityL (whichLinkConnects city1 city2 links) ) - (usedCapacityR tunels (whichLinkConnects city1 city2 links)) > 0)
+existsLwCapacity city1 city2 links tunels = 
+        areCitiesLinked city1 city2 links && ((availableCapacityForLink city1 city2 links tunels) > 0)
+
 
 availableCapacityForR :: Region -> City -> City -> Int 
 availableCapacityForR (Reg cities links tunels) city1 city2 
-        | existsLwCapacity city1 city2 links tunels = (capacityL (whichLinkConnects city1 city2 links) ) - (usedCapacityR tunels (whichLinkConnects city1 city2 links)) 
+        | existsLwCapacity city1 city2 links tunels = (availableCapacityForLink city1 city2 links tunels) 
         | otherwise = error "Las ciudades no estan enlazadas (por un link), o no hay mas capacidad"
+        
