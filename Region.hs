@@ -85,11 +85,6 @@ existsLwCapacity city1 city2 links tunels =
 
 availableCapacityForR :: Region -> City -> City -> Int 
 availableCapacityForR (Reg cities links tunels) city1 city2 
-<<<<<<< HEAD
         | existsLwCapacity city1 city2 links tunels = (availableCapacityForLink city1 city2 links tunels) 
         | otherwise = error "Las ciudades no estan enlazadas (por un link), o no hay mas capacidad"
         
-=======
-        | existsLwCapacity city1 city2 links tunels = (capacityL (whichLinkConnects city1 city2 links) ) - (usedCapacityR tunels (whichLinkConnects city1 city2 links)) 
-        | otherwise = error "Las ciudades no estan enlazadas (por un link), o no hay mas capacidad"
->>>>>>> 44482fe42687dabfabcb7c08463b75fea663fcdc
