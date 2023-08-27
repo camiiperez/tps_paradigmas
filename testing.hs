@@ -79,6 +79,7 @@ olivosLaLucilaNotConnected = connectsT olivos laLucila tunelMitre
 laLucilaBeccarNotConnected = connectsT laLucila beccar tunelRetiro
 olivosMartinezConnected = connectsT olivos martinez tunelSolitario
 martinezOlivosConnected = connectsT martinez olivos tunelSolitario
+martinezMartinezConnectedExcept = connectsT martinez martinez tunelSolitario    
 
 tunelMitreUsesLink = usesT linkOlivosMartinez tunelMitre
 tunelMitreNotUsesLink = usesT linkBeccarVicenteL tunelMitre
