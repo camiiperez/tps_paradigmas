@@ -33,7 +33,10 @@ isItExtreme linksList city
    |otherwise = True
 
 connectsT :: City -> City -> Tunel -> Bool 
-connectsT city1 city2 (Tun linksList) =  (isItExtreme linksList city1) && (isItExtreme linksList city2)
+connectsT city1 city2 (Tun linksList) 
+   | (nameC(city1) == nameC(city2)) = error "Debe ingresar dos ciudades distintas"
+   |  (isItExtreme linksList city1) && (isItExtreme linksList city2) = True
+   |  otherwise = False
 
 usesT :: Link -> Tunel -> Bool 
 usesT linkSearched (Tun linksList) = elem linkSearched linksList
