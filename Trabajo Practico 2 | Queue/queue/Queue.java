@@ -7,15 +7,11 @@ public class Queue {
 	public List<Object> queues = new ArrayList<>();
   
 	public boolean isEmpty() {
-		if (queues.isEmpty())
-		return true;
-		else {
-			return false;
+		return queues.isEmpty();
 		}
-	}
 
-	public Queue add( Object  cargo ) {
-		queues.add(cargo);
+	public Queue add( Object  element ) {
+		queues.add(element);
 		return this;
 	}
 
@@ -39,4 +35,3 @@ public class Queue {
 	}
 
 }
-
