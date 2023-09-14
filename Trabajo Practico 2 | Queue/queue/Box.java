@@ -2,15 +2,13 @@ package queue;
 
 public class Box {
 	Object cargo;
-	public Box(Object cargo) {
-		this.cargo = cargo;
+	public Box() {
+		
 	}
-	
 	Object getCargo() {
-		return this.cargo;
+		return this;
 	}
-	
-	boolean isEmpty() {
-		return false;
+	Object isEmpty() {
+		return this;
 	}
 }

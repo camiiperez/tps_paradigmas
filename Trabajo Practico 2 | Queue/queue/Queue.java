@@ -8,16 +8,16 @@ public class Queue {
 
 	public Queue(){
 		queue= new ArrayList<Box>();
-		queue.add(new ToxicBox("Toxic"));
+		queue.add(new ToxicBox());
 	}
 	
 	public boolean isEmpty() {
-		return queue.get(0).isEmpty();
+		return (boolean) queue.get(0).isEmpty();
 		}
 
 	public Queue add( Object  cargo ) {
 		Box lastObject = queue.remove(this.size());
-		queue.add(new Box(cargo));
+		queue.add(new GoodBox(cargo));
 		queue.add(lastObject);
 		return this;
 	}
