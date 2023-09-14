@@ -4,34 +4,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Queue {
-	public List<Object> queues = new ArrayList<>();
-  
+	public List<Box> queue; 
+
+	public Queue(){
+		queue= new ArrayList<Box>();
+		queue.add(new ToxicBox("Toxic"));
+	}
+	
 	public boolean isEmpty() {
-		return queues.isEmpty();
+		return queue.get(0).isEmpty();
 		}
 
-	public Queue add( Object  element ) {
-		queues.add(element);
+	public Queue add( Object  cargo ) {
+		Box lastObject = queue.remove(this.size());
+		queue.add(new Box(cargo));
+		queue.add(lastObject);
 		return this;
 	}
 
 	public Object take() {
-		if(queues.isEmpty()) {
-			throw new Error("Queue is empty");
-		}
-		return queues.remove(0);
-		
+		this.head();
+		Box firstElement = queue.remove(0);
+		return firstElement.getCargo();
 	}
 
 	public Object head() {
-		if (!queues.isEmpty()) {
-	        return queues.get(0); // Obtiene el primer elemento de la lista
-	    } 
-	    throw new Error("Queue is empty");
+		return queue.get(0).getCargo();
 	}
 
 	public int size() {
-		return queues.size();
+		return queue.size() - 1;
 	}
 
 }
+
+
