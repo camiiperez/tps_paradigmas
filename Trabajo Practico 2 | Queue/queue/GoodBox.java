@@ -10,7 +10,7 @@ public class GoodBox extends Box {
 		return this.cargo;
 	}
 	
-	Object isEmpty() {
+	boolean isEmpty() {
 		return false;
 	}
 }

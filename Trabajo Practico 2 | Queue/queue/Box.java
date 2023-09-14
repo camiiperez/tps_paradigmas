@@ -8,7 +8,7 @@ public class Box {
 	Object getCargo() {
 		return this;
 	}
-	Object isEmpty() {
-		return this;
+	boolean isEmpty() {
+		return this.isEmpty();
 	}
 }

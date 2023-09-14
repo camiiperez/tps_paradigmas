@@ -8,7 +8,7 @@ public class ToxicBox extends Box {
 		throw new Error("Queue is empty"); 
 	}
 
-	Object isEmpty() {
+	boolean isEmpty() {
 		return true;
 	}
 	
