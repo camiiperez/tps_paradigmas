@@ -1,14 +1,10 @@
 package queue;
 
-public class Box {
-	Object cargo;
+public abstract class Box {
 	public Box() {
 		
 	}
-	Object getCargo() {
-		return this;
-	}
-	boolean isEmpty() {
-		return this.isEmpty();
-	}
+	abstract Object getCargo();
+	
+	abstract boolean isEmpty();
 }
