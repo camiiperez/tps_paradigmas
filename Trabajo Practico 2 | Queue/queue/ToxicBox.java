@@ -2,6 +2,8 @@ package queue;
 
 public class ToxicBox extends Box {
 	
+	public static String QueueIsEmpty = "Queue is empty";
+
 	public ToxicBox() {
 	}
 
@@ -10,6 +12,6 @@ public class ToxicBox extends Box {
 	}
 
 	Object getCargo() {
-		throw new Error("Queue is empty"); 
+		throw new Error(QueueIsEmpty); 
 	}
 }
