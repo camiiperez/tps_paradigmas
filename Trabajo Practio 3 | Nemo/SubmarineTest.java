@@ -22,11 +22,6 @@ public class SubmarineTest {
         assertEquals(0, nemo.sendInstructions("").getDepth().getValue());
         assertEquals(new North().getValue()	, nemo.sendInstructions("").getDirection().getValue());
 	}	
-//	@Test public void random() {
-//		Submarine nemo = new Submarine();
-//		nemo.sendInstructions("d");
-//		assertEquals(-1,Depth.depths.get(Depth.depths.size() - 1).getValue());
-//	}
 	
 	@Test public void test02AssertsNemoDescending() {
 		Submarine nemo = new Submarine();
