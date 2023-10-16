@@ -7,9 +7,9 @@ public class BeyondMinusOne extends Depth{
 		value = -(Submarine.depthHistory.size() - 1);
 	}
 
-	public void ascend() {
+	public Depth ascend() {
 		Submarine.depthHistory.remove(Submarine.depthHistory.size() - 1);
-		
+		return Submarine.depthHistory.get(Submarine.depthHistory.size() - 1);
 	}
 	
 	public Depth descend() {

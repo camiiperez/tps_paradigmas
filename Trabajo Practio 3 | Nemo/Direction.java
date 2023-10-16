@@ -1,11 +1,11 @@
 
 public abstract class Direction {
 	
-	public abstract void turnRight();
+	public abstract Direction turnRight();
 	
-	public abstract void turnLeft();
+	public abstract Direction turnLeft();
 	
-	public abstract void moveForward();
+	public abstract int[] moveForward();
 
 	public abstract String getValue();
 }

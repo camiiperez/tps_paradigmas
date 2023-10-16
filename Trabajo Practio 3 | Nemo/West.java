@@ -6,16 +6,18 @@ public class West extends Direction {
 		value = "West";
 	}
 	
-	public void turnRight() {
-		Submarine.direction = new North();
+	public Direction turnRight() {
+		return new North();
 	}
 
-	public void turnLeft() {
-		Submarine.direction = new South();
+	public Direction turnLeft() {
+		return new South();
 	}
-
-	public void moveForward() {
-		Submarine.coordinates[0] -= 1;
+	
+	public int[] moveForward() {
+		int yCoordinates = Submarine.coordinates[1];
+		int xCoordinates = Submarine.coordinates[0] - 1;
+		return new int[] {xCoordinates,yCoordinates};
 	}
 	
 	public String getValue() {

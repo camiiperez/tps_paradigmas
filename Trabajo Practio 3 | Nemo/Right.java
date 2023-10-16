@@ -6,26 +6,12 @@ public class Right extends Command{
 		type = 'r';
 	}
 	
-	public void ascend() {
-	}
-
-	public void descend() {
-	}
-
-	public void turnRight() {
-	}
-
-	public void turnLeft() {
-	}
-
-	public void moveForward() {
-	}
-
-	public void releaseCapsule() {
-	}
-	
 	public char getType() {
 		return type;
+	}
+	
+	public void execute(Depth depth, Direction direction) {
+		Submarine.direction = direction.turnRight();
 	}
 
 }

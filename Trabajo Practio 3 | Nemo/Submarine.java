@@ -27,49 +27,16 @@ public class Submarine {
 		direction = new North();
 	}		
 	
-//	public Submarine sendInstructions(String commandsToFollow) {
-//		for (int i = 0; i < commandsToFollow.length(); i++) {
-//		    char comando = commandsToFollow.charAt(i);
-//		    
-//		    if (comando == 'd') {
-//		    	depth.descend();
-//		    }
-//		    
-//		    if (comando == 'u') {
-//		    	depth.ascend();
-//		    }
-//		    
-//		    if (comando == 'l') {
-//		    	direction.turnLeft();
-//		    }
-//		    
-//		    if (comando == 'r') {
-//		    	direction.turnRight();
-//		    }
-//		    
-//		    if (comando == 'f') {
-//		    	direction.moveForward();
-//		    	
-//		    }
-//		    
-//		    if (comando == 'm') {
-//		    	depth.releaseCapsule();
-//		    	
-//		    }
-//		    depth = depthHistory.get(depthHistory.size() - 1);
-//		}
-//		return this;
-//	}
-	
-	public static void sendInstructions(String commandsToFollow) {
+	public Submarine sendInstructions(String commandsToFollow) {
 	        commandsToFollow.chars() 
 	                .forEach(character -> {	          
 	                    char command = (char) character; 
 	                    commands.stream()
 	                    .filter(comando -> comando.getType() == command)
-	                    .forEach(comando -> comando.execute());
+	                    .forEach(comando -> comando.execute(depth,direction));
 	                    
 	                });
+	                return this;
 	    }
 	
 

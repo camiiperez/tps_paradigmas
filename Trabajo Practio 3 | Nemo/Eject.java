@@ -5,26 +5,13 @@ public class Eject extends Command{
 	public Eject() {
 		type = 'm';
 	}
-	public void ascend() {
-	}
-
-	public void descend() {
-	}
-
-	public void turnRight() {
-	}
-
-	public void turnLeft() {
-	}
-
-	public void moveForward() {
-	}
-
-	public void releaseCapsule() {
-	}
 	
 	public char getType() {
 		return type;
+	}
+	
+	public void execute(Depth depth, Direction direction) {
+		depth.releaseCapsule();
 	}
 
 }

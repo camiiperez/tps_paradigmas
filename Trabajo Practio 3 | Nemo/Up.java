@@ -5,27 +5,13 @@ public class Up extends Command{
 	public Up() {
 		type = 'u';
 	}
-
-	public void ascend() {
-	}
-
-	public void descend() {
-	}
-
-	public void turnRight() {
-	}
-
-	public void turnLeft() {
-	}
-
-	public void moveForward() {
-	}
-
-	public void releaseCapsule() {
-	}
 	
 	public char getType() {
 		return type;
+	}
+
+	public void execute(Depth depth, Direction direction) {
+		Submarine.depth = depth.ascend();
 	}
 
 }

@@ -1,6 +1,6 @@
 public abstract class Depth {		
 	
-	public abstract void ascend();
+	public abstract Depth ascend();
 
 	public abstract Depth descend();
 	

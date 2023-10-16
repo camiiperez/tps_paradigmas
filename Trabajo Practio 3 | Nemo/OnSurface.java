@@ -6,7 +6,8 @@ public class OnSurface extends Depth{
 		value = 0;
 	}
 	
-	public void ascend() {
+	public Depth ascend() {
+		return this;
 	}
 
 	public Depth descend() {	
