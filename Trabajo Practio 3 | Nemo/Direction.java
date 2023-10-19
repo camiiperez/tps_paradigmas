@@ -5,7 +5,7 @@ public abstract class Direction {
 	
 	public abstract Direction turnLeft();
 	
-	public abstract int[] moveForward();
+	public abstract void moveForward(Point position);
 
 	public abstract String getValue();
 }

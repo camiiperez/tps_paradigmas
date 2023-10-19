@@ -11,14 +11,14 @@ public class SubmarineTest {
 	
 	@Test public void test00CoordinatesDepthAndDirection(){
 		Submarine nemo = new Submarine();
-        assertArrayEquals(new int[]{0, 0}, nemo.getCoordinates());
+        assertArrayEquals(new int[]{0, 0}, nemo.getPosition());
         assertEquals(0, nemo.getDepth().getValue());
         assertEquals(new North().getValue(), nemo.getDirection().getValue());
 	}	
 	
 	@Test public void test01NemoShouldNotMoveWhenNotAskedTo() {
 		Submarine nemo = new Submarine();
-		assertArrayEquals(new int[]{0, 0}, nemo.sendInstructions("").getCoordinates());
+		assertArrayEquals(new int[]{0, 0}, nemo.sendInstructions("").getPosition());
         assertEquals(0, nemo.sendInstructions("").getDepth().getValue());
         assertEquals(new North().getValue()	, nemo.sendInstructions("").getDirection().getValue());
 	}	
@@ -52,7 +52,7 @@ public class SubmarineTest {
 	}
 		@Test public void test07AssertNemoMovesF() {
 			Submarine nemo = new Submarine();
-			assertArrayEquals(new int[]{0, 1}, nemo.sendInstructions("f").getCoordinates());
+			assertArrayEquals(new int[]{0, 1}, nemo.sendInstructions("f").getPosition());
 	}
 	
 //	@Test public void test07NemoReleasesCapsuleAtCorrectDepth() {
@@ -63,26 +63,26 @@ public class SubmarineTest {
 	@Test public void test08AssertsNemoCanMoveForwardInDirection() {
 		Submarine nemo = new Submarine();
 		nemo.sendInstructions("f");
-		assertArrayEquals(new int[]{0, 1},nemo.getCoordinates());
+		assertArrayEquals(new int[]{0, 1},nemo.getPosition());
 		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{1, 1},nemo.getCoordinates());
+		assertArrayEquals(new int[]{1, 1},nemo.getPosition());
 		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{1, 0},nemo.getCoordinates());
+		assertArrayEquals(new int[]{1, 0},nemo.getPosition());
 		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{0, 0},nemo.getCoordinates());
+		assertArrayEquals(new int[]{0, 0},nemo.getPosition());
 		
 	}
 	
 	@Test public void test09AssertNemoCanMoveBackwardsInDirection() {
 		Submarine nemo = new Submarine();
 		nemo.sendInstructions("rrf");
-		assertArrayEquals(new int[]{0, -1},nemo.getCoordinates());
+		assertArrayEquals(new int[]{0, -1},nemo.getPosition());
 		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{-1, -1},nemo.getCoordinates());
+		assertArrayEquals(new int[]{-1, -1},nemo.getPosition());
 		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{-1, 0},nemo.getCoordinates());
+		assertArrayEquals(new int[]{-1, 0},nemo.getPosition());
 		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{0, 0},nemo.getCoordinates());
+		assertArrayEquals(new int[]{0, 0},nemo.getPosition());
 	}
 	
 	@Test public void test10AssertsNemoCannotReleaseCapsuleAtLessThanMinusOneDepthAndStopsWorking() {

@@ -14,10 +14,8 @@ public class West extends Direction {
 		return new South();
 	}
 	
-	public int[] moveForward() {
-		int yCoordinates = Submarine.coordinates[1];
-		int xCoordinates = Submarine.coordinates[0] - 1;
-		return new int[] {xCoordinates,yCoordinates};
+	public void moveForward(Point position) {
+		position.sumVector(-1,0);
 	}
 	
 	public String getValue() {

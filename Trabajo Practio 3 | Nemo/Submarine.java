@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Submarine {
-	static int[] coordinates = new int[2];
+	static Point position;
 	static Depth depth;
 	static Direction direction;
 	public static ArrayList<Depth> depthHistory;
@@ -9,23 +11,14 @@ public class Submarine {
 //	"North","East","South","West";	
 
 	
-	public Submarine() {
-		coordinates[0] = 0;
-		coordinates[1] = 0;
-		commands = new ArrayList<Command>();
-		commands.add(new Up());
-		commands.add(new Down());
-		commands.add(new Right());
-		commands.add(new Left());
-		commands.add(new Forward());
-		commands.add(new Eject());
+	public Submarine(/*int xValue, int yValue, String diretzioneee*/) {
+	    position = new Point(0, 0);
+	    commands = new ArrayList<>(Arrays.asList(new Up(), new Down(), new Right(), new Left(), new Forward(), new Eject()));
+	    depthHistory = new ArrayList<>(Collections.singletonList(new OnSurface()));
+	    depth = depthHistory.get(depthHistory.size() - 1);
+	    direction = new North();
+	}
 		
-		depthHistory = new ArrayList<Depth>();
-		depthHistory.add(new OnSurface());
-		
-		depth = depthHistory.get(depthHistory.size() - 1);
-		direction = new North();
-	}		
 	
 	public Submarine sendInstructions(String commandsToFollow) {
 	        commandsToFollow.chars() 
@@ -41,8 +34,8 @@ public class Submarine {
 	
 
 
-	public static int[] getCoordinates() {
-		return coordinates;
+	public static int[] getPosition() {
+		return position.getCoordinates();
 	}
 	
 	public static Depth getDepth() {

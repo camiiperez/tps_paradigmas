@@ -13,14 +13,14 @@ public class North extends Direction {
 		return new West();
 	}
 
-	public int[] moveForward() {
-		int yCoordinates = Submarine.coordinates[1] + 1;
-		int xCoordinates = Submarine.coordinates[0];
-		return new int[] {xCoordinates,yCoordinates};
+	public void moveForward(Point position) {
+		position.sumVector(0,1);
 	}
 	
 	public String getValue() {
 		return value;
 	}
+
+	
 
 }
