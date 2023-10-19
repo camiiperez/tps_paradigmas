@@ -1,19 +1,11 @@
-import java.util.ArrayList;
-import java.util.Collections;
-
 public class Submarine {
 	static Point position;
 	static Depth depth;
 	static Direction direction;
-	public static ArrayList<Depth> depthHistory;
-//	"North","East","South","West";	
-
 	
 	public Submarine(int xValue, int yValue, String directionSearched) { 
-	    depthHistory = new ArrayList<>(Collections.singletonList(new OnSurface()));
-	    
 	    position = new Point(xValue, yValue);
-	    depth = depthHistory.get(depthHistory.size() - 1);
+	    depth = new OnSurface();
 	    direction = Direction.directionFor(directionSearched);
 	}
 
@@ -25,10 +17,6 @@ public class Submarine {
 	                });
 	                return this;
 	    }
-	
-
-	
-
 	
 	public static int[] getPosition() {
 		return position.getCoordinates();

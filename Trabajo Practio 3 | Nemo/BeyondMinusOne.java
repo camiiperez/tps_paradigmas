@@ -3,13 +3,13 @@ public class BeyondMinusOne extends Depth{
 	int value;
 	
 	public BeyondMinusOne() {
-		Submarine.depthHistory.add(this);
-		value = -(Submarine.depthHistory.size() - 1);
+		depthHistory.add(this);
+		value = -(depthHistory.size() - 1);
 	}
 
 	public Depth ascend() {
-		Submarine.depthHistory.remove(Submarine.depthHistory.size() - 1);
-		return Submarine.depthHistory.get(Submarine.depthHistory.size() - 1);
+		depthHistory.remove(depthHistory.size() - 1);
+		return depthHistory.get(depthHistory.size() - 1);
 	}
 	
 	public Depth descend() {

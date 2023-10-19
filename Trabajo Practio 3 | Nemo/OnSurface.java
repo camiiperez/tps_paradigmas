@@ -1,9 +1,14 @@
 
 public class OnSurface extends Depth{
 	int value;
+	int i = 0 ;
 	
 	public OnSurface() {
-		value = 0;
+		depthHistory.clear();
+		value = 0;	
+		depthHistory.add(this);	
+		
+		
 	}
 	
 	public Depth ascend() {

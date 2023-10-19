@@ -4,12 +4,12 @@ public class MinusOne extends Depth{
 	
 	public MinusOne() {
 		value = -1;
-		Submarine.depthHistory.add(this);
+		depthHistory.add(this);
 	}
 	
 	public Depth ascend() {
-		Submarine.depthHistory.remove(Submarine.depthHistory.size() - 1);
-		return Submarine.depthHistory.get(Submarine.depthHistory.size() - 1);
+		depthHistory.remove(depthHistory.size() - 1);
+		return depthHistory.get(depthHistory.size() - 1);
 	}
 
 	public Depth descend() {

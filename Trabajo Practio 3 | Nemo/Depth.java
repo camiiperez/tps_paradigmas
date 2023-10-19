@@ -1,9 +1,7 @@
 import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class Depth {
-	public static ArrayList<Depth> depthHistory 
-	= new ArrayList<>(Collections.singletonList(new OnSurface()));
+	public static ArrayList<Depth> depthHistory =  new ArrayList<Depth>();
 	
 	public abstract Depth ascend();
 
@@ -12,4 +10,9 @@ public abstract class Depth {
 	public abstract void releaseCapsule();
 
 	public abstract int getValue();
+
+	public static Depth actualDepth() {
+		Depth actualD = depthHistory.get(depthHistory.size() - 1);
+		return actualD;
+	}
 }
