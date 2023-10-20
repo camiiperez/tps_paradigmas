@@ -8,8 +8,10 @@ public class Point {
 	}
 
 	public void sumVector(int xValue, int yValue) {		
-		coordinates[0] += xValue;
-		coordinates[1] += yValue;
+		int x = coordinates[0] += xValue;
+		int y = coordinates[1] += yValue;
+		
+		Submarine.setPosition(new Point(x,y));
 	}
 	
 	public int[] getCoordinates() {

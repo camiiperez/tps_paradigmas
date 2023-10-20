@@ -17,6 +17,7 @@ public class MinusOne extends Depth{
 	}
 
 	public void releaseCapsule() {
+		Submarine.setCapsuleState(false);
 	}
 	
 	public int getValue() {

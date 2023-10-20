@@ -20,6 +20,7 @@ public class OnSurface extends Depth{
 	}
 
 	public void releaseCapsule() {
+		Submarine.setCapsuleState(false);
 	}
 	
 	public int getValue() {

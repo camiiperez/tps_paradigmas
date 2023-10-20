@@ -2,11 +2,16 @@ public class Submarine {
 	static Point position;
 	static Depth depth;
 	static Direction direction;
+	static boolean isCapsuleInside;
 	
 	public Submarine(int xValue, int yValue, String directionSearched) { 
-	    position = new Point(xValue, yValue);
+	
+		position = new Point(xValue, yValue);
 	    depth = new OnSurface();
 	    direction = Direction.directionFor(directionSearched);
+	    isCapsuleInside = true;
+	    
+	
 	}
 
 	public Submarine sendInstructions(String commandsToFollow) {
@@ -18,8 +23,20 @@ public class Submarine {
 	                return this;
 	    }
 	
-	public static int[] getPosition() {
-		return position.getCoordinates();
+	public static Point getPosition() {
+		return position;
+	}
+	
+	public static void setPosition(Point point) {
+		position = point;
+	}
+	
+	public static boolean getCapsuleState() {
+		return isCapsuleInside;
+	}
+	
+	public static void setCapsuleState(boolean isItInside) {
+		isCapsuleInside = isItInside;
 	}
 	
 	public static Depth getDepth() {
@@ -29,4 +46,5 @@ public class Submarine {
 	public static Direction getDirection() {
 		return direction;
 	}
+	
 }
