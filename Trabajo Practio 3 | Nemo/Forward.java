@@ -11,6 +11,6 @@ public class Forward extends Command{
 	}
 	
 	public void execute(Depth depth, Direction direction) {
-		direction.moveForward(Submarine.position);
+		direction.moveForward(Submarine.getPosition());
 	}
 }

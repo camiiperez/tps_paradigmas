@@ -11,7 +11,7 @@ public class Up extends Command{
 	}
 
 	public void execute(Depth depth, Direction direction) {
-		Submarine.depth = depth.ascend();
+		Submarine.setDepth(depth.ascend());
 	}
 
 }

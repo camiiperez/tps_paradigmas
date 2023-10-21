@@ -11,7 +11,7 @@ public class Left extends Command{
 	}
 	
 	public void execute(Depth depth, Direction direction) {
-		Submarine.direction = direction.turnLeft();
+		Submarine.setDirection(direction.turnLeft());
 	}
 
 }

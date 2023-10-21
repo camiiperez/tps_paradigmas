@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Command {
+	
 	public static ArrayList<Command> commands = 
 	new ArrayList<>(Arrays.asList(new Up(), new Down(), new Right(), new Left(), new Forward(), new Eject())); 
 	

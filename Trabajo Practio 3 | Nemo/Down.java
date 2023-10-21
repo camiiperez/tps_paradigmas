@@ -11,7 +11,7 @@ public class Down extends Command{
 	}
 	
 	public void execute(Depth depth, Direction direction) {
-		Submarine.depth = depth.descend();
+		Submarine.setDepth(depth.descend());
 	}
 
 }

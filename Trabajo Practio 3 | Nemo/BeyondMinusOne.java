@@ -1,5 +1,6 @@
 
 public class BeyondMinusOne extends Depth{
+	public static String elSubmarinoHaDejadoDeFuncionarError = "El submarino ha dejado de funcionar";
 	int value;
 	
 	public BeyondMinusOne() {
@@ -17,7 +18,7 @@ public class BeyondMinusOne extends Depth{
 	}
 
 	public void releaseCapsule() {
-		throw new RuntimeException("El submarino ha dejado de funcionar");
+		throw new RuntimeException(elSubmarinoHaDejadoDeFuncionarError);
 	}
 	
 	public int getValue() {

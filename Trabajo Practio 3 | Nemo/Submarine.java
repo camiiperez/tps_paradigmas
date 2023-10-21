@@ -42,9 +42,16 @@ public class Submarine {
 	public static Depth getDepth() {
 		return depth;
 	}
+	public static void setDepth(Depth newDepth) {
+		depth = newDepth;
+	}
 	
 	public static Direction getDirection() {
 		return direction;
+	}
+	
+	public static void setDirection(Direction newDirection) {
+		direction = newDirection;
 	}
 	
 }

@@ -9,184 +9,193 @@ import org.junit.jupiter.api.Test;
 
 public class SubmarineTest {
 	
+	private static final String north = "North";
+	private static final String east = "East";
+	private static final String south = "South";
+	private static final String west = "West";
+	
+	private static final int minusFour = -4;
+	private static final int minusThree = -3;
+	private static final int minusTwo = -2;
+	private static final int minusOne = -1;
+	private static final int zero = 0;
+	private static final int one = 1;
+	private static final int three = 3;
+	private static final int five = 5;
+	
+	private static final int[] zeroMinusTwo = new int[]{zero, minusTwo};
+	private static final int[] minusOneZero = new int[]{minusOne, zero};
+	private static final int[] minusOneMinusOne = new int[]{minusOne, minusOne};
+	private static final int[] zeroMinusOne = new int[]{zero, minusOne};
+	private static final int[] oneZero = new int[]{one, zero};
+	private static final int[] oneOne = new int[]{one, one};
+	private static final int[] zeroThree = new int[]{zero, three};
+	private static final int[] zeroOne = new int[]{zero, one};
+	private static final int[] threeFive = new int[]{three, five};
+	private static final int[] zeroZero = new int[]{zero, zero};
+
 	@Test public void test00AssertsNemoSpawnsInOriginAndNorth(){
-		Submarine nemo = new Submarine(0,0,"North");
-        assertArrayEquals(new int[]{0, 0}, nemo.getPosition().getCoordinates());
-        assertEquals(0, nemo.getDepth().getValue());
-        assertEquals("North", nemo.getDirection().getValue());
-	}	
+		assertArrayEquals(zeroZero, submarineWithPosAndDirection(zero, zero, north).getPosition().getCoordinates());
+        assertEquals(zero, submarineWithPosAndDirection(zero, zero, north).getDepth().getValue());
+        assertEquals(north, submarineWithPosAndDirection(zero, zero, north).getDirection().getValue());
+	}
+		
 	@Test public void test01AssertsNemoSpawnsNotInAnotherPositionAndDirection() {
-		Submarine nemo = new Submarine (3,5,"South");
-        assertArrayEquals(new int[]{3, 5}, nemo.getPosition().getCoordinates());
-        assertEquals(0, nemo.getDepth().getValue());
-        assertEquals("South", nemo.getDirection().getValue());
+		assertArrayEquals(threeFive, submarineWithPosAndDirection(three, five, south).getPosition().getCoordinates());
+        assertEquals(zero, submarineWithPosAndDirection(three, five, south).getDepth().getValue());
+        assertEquals(south, submarineWithPosAndDirection(three, five, south).getDirection().getValue());
 	}
 	
 	@Test public void test02NemoShouldNotMoveWhenNotAskedTo() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertArrayEquals(new int[]{0, 0}, nemo.sendInstructions("").getPosition().getCoordinates());
-        assertEquals(0, nemo.sendInstructions("").getDepth().getValue());
-        assertEquals("North", nemo.sendInstructions("").getDirection().getValue());
+		assertArrayEquals(zeroZero, submarineWithPosAndDirection(zero, zero, north).sendInstructions("").getPosition().getCoordinates());
+        assertEquals(zero, submarineWithPosAndDirection(zero, zero, north).sendInstructions("").getDepth().getValue());
+        assertEquals(north, submarineWithPosAndDirection(zero, zero, north).sendInstructions("").getDirection().getValue());
 	}	
 
 	@Test public void test03AssertsNemoDescendsOnce() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertEquals(-1, nemo.sendInstructions("d").getDepth().getValue());
+		assertEquals(minusOne,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("d").getDepth().getValue());
 	}
 	
 	@Test public void test04AssertsNemoDescendsMoreThanOnce() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertEquals(-4, nemo.sendInstructions("dddd").getDepth().getValue());
+		assertEquals(minusFour,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("dddd").getDepth().getValue());
 	}
 	
 	@Test public void test05AssertsNemoAscends() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertEquals(-1, nemo.sendInstructions("d").getDepth().getValue());
-		assertEquals(0,nemo.sendInstructions("u").getDepth().getValue());
+		assertEquals(minusOne,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("d").getDepth().getValue());
+		assertEquals(zero,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("u").getDepth().getValue());
 	}
 	
 	@Test public void test06AssertsNemoAscendsWhenDeeper() {
-		Submarine nemo = new Submarine(0,0,"North");
-		nemo.sendInstructions("dddd");
-		assertEquals(-2,nemo.sendInstructions("uu").getDepth().getValue());
+		assertEquals(minusTwo,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("dddduu").getDepth().getValue());
 	}
 	
 	@Test public void test07NemoDoesntAscendWhenOnSurface(){
-		Submarine nemo = new Submarine(0,0,"North");
-		assertEquals(0,nemo.sendInstructions("u").getDepth().getValue());
+		assertEquals(zero,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("u").getDepth().getValue());
 	}
 	
 	@Test public void test08AssertsNemoAscendsWhenDeeperButDoesntAscendAtSurface() {
-	Submarine nemo = new Submarine(0,0,"North");
-	nemo.sendInstructions("dddd");
-	assertEquals(0,nemo.sendInstructions("uuuuuu").getDepth().getValue());
+	assertEquals(zero,
+			submarineWithPosAndDirection(zero, zero, north).sendInstructions("dddduuuuuu").getDepth().getValue());
 	}
 	
 	@Test public void test09AssertNemoMovesRightOnce() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertEquals("East",nemo.sendInstructions("r").getDirection().getValue());
+		assertEquals(east,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("r").getDirection().getValue());
 	}
 	
 	@Test public void test10AssertsNemoMovesRightMultipleTimes() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertEquals("West",nemo.sendInstructions("rrr").getDirection().getValue());
+		assertEquals(west,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("rrr").getDirection().getValue());
 	}
 	
 	@Test public void test11AssertsNemoMovesRightAtDepth() {
-		Submarine nemo = new Submarine(0,0,"North");
-		nemo.sendInstructions("ddd");
-		assertEquals("South",nemo.sendInstructions("rr").getDirection().getValue());
+		assertEquals(south,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("dddrr").getDirection().getValue());
 		
 	}
 	
 	@Test public void test12AssertsNemoMovesLeftOnce() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertEquals("West",nemo.sendInstructions("l").getDirection().getValue());
+		assertEquals(west,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("l").getDirection().getValue());
 		
 	}
 	
 	@Test public void test13AssertsNemoMovesLeftMultipleTimes() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertEquals("East",nemo.sendInstructions("lll").getDirection().getValue());
+		assertEquals(east,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("lll").getDirection().getValue());
 	}
 	
 	@Test public void test14AssertsNemoMovesLeftAtDepth() {
-		Submarine nemo = new Submarine(0,0,"North");
-		nemo.sendInstructions("ddd");
-		assertEquals("South",nemo.sendInstructions("ll").getDirection().getValue());
+		assertEquals(south,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("dddll").getDirection().getValue());
 	}
 	
 	@Test public void test15AssertNemoMovesForwardOnce() {
-			Submarine nemo = new Submarine(0,0,"North");
-			assertArrayEquals(new int[]{0, 1}, nemo.sendInstructions("f").getPosition().getCoordinates());
+			assertArrayEquals(zeroOne, 
+					submarineWithPosAndDirection(zero, zero, north).sendInstructions("f").getPosition().getCoordinates());
 	}
 	
 	@Test public void test16AssertsNemoMovesForwardMultipleTimes() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertArrayEquals(new int[]{0, 3}, nemo.sendInstructions("fff").getPosition().getCoordinates());
+		assertArrayEquals(zeroThree, 
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("fff").getPosition().getCoordinates());
 	}
 	
 	@Test public void test17AssertsNemoMovesForwardAtDepth() {
-		Submarine nemo = new Submarine(0,0,"North");
-		nemo.sendInstructions("ddd");
-		assertArrayEquals(new int[]{0, 3}, nemo.sendInstructions("fff").getPosition().getCoordinates());
+		assertArrayEquals(zeroThree,
+				submarineWithPosAndDirection(zero, zero, north).sendInstructions("dddfff").getPosition().getCoordinates());
 	}
 	
 	@Test public void test18AssertsNemoCanMoveForwardInDirection() {
-		Submarine nemo = new Submarine(0,0,"North");
-		nemo.sendInstructions("f");
-		assertArrayEquals(new int[]{0, 1},nemo.getPosition().getCoordinates());
-		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{1, 1},nemo.getPosition().getCoordinates());
-		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{1, 0},nemo.getPosition().getCoordinates());
-		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{0, 0},nemo.getPosition().getCoordinates());
+		Submarine nemo = submarineWithPosAndDirection(zero, zero, north);
+		assertArrayEquals(zeroOne,nemo.sendInstructions("f").getPosition().getCoordinates());
+		assertArrayEquals(oneOne,nemo.sendInstructions("rf").getPosition().getCoordinates());
+		assertArrayEquals(oneZero,nemo.sendInstructions("rf").getPosition().getCoordinates());
+		assertArrayEquals(zeroZero,nemo.sendInstructions("rf").getPosition().getCoordinates());
 		
 	}
 	@Test public void test19AssertsNemoCanMoveForwardInDirectionAndDepth() {
-		Submarine nemo = new Submarine(0,0,"North");
-		nemo.sendInstructions("ddd");
-		nemo.sendInstructions("f");
-		assertArrayEquals(new int[]{0, 1},nemo.getPosition().getCoordinates());
-		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{1, 1},nemo.getPosition().getCoordinates());
-		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{1, 0},nemo.getPosition().getCoordinates());
-		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{0, 0},nemo.getPosition().getCoordinates());
+		Submarine nemo = submarineWithPosAndDirection(zero,zero, north);
+		
+		assertArrayEquals(zeroOne,nemo.sendInstructions("dddf").getPosition().getCoordinates());
+		assertArrayEquals(oneOne,nemo.sendInstructions("rf").getPosition().getCoordinates());
+		assertArrayEquals(oneZero,nemo.sendInstructions("rf").getPosition().getCoordinates());
+		assertArrayEquals(zeroZero,nemo.sendInstructions("rf").getPosition().getCoordinates());
 		
 	}
-	//Cuanto conocimiento se gana con este test? Habria que repensarlo.
+
 	@Test public void test20AssertNemoCanMoveBackwardsInDirection() {
-		Submarine nemo = new Submarine(0,0,"North");
-		nemo.sendInstructions("rrf");
-		assertArrayEquals(new int[]{0, -1},nemo.getPosition().getCoordinates());
-		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{-1, -1},nemo.getPosition().getCoordinates());
-		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{-1, 0},nemo.getPosition().getCoordinates());
-		nemo.sendInstructions("rf");
-		assertArrayEquals(new int[]{0, 0},nemo.getPosition().getCoordinates());
+		Submarine nemo = submarineWithPosAndDirection(zero, zero, north);
+		assertArrayEquals(zeroMinusOne,nemo.sendInstructions("rrf").getPosition().getCoordinates());
+		assertArrayEquals(minusOneMinusOne,nemo.sendInstructions("rf").getPosition().getCoordinates());
+		assertArrayEquals(minusOneZero,nemo.sendInstructions("rf").getPosition().getCoordinates());
+		assertArrayEquals(zeroZero,nemo.sendInstructions("rf").getPosition().getCoordinates());
 	}
 	
 	@Test public void test21AssertsNemoSpawnsWithCapsuleInside() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertTrue(nemo.getCapsuleState());
+		assertTrue(submarineWithPosAndDirection(zero, zero, north).getCapsuleState());
 	}
 	
 	@Test public void test22AssertsNemoReleasesCapsuleAtSurface() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertFalse(nemo.sendInstructions("m").getCapsuleState());
+		assertFalse(submarineWithPosAndDirection(zero, zero, north).sendInstructions("m").getCapsuleState());
 	}
 	
 	@Test public void test23AssertsNemoReleasesCapsuleAtMinusOneDepth() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertFalse(nemo.sendInstructions("dm").getCapsuleState());
+		assertFalse(submarineWithPosAndDirection(zero, zero, north).sendInstructions("dm").getCapsuleState());
 	}
 	
 	@Test public void test24AssertsNemoCannotReleaseCapsuleAtLessThanMinusOneDepthAndStopsWorking() {
-		Submarine nemo = new Submarine(0,0,"North");
-		assertThrowsLike("El submarino ha dejado de funcionar",() -> nemo.sendInstructions("ddm"));
-		assertTrue(nemo.getCapsuleState());
+		assertThrowsLike(BeyondMinusOne.elSubmarinoHaDejadoDeFuncionarError,
+				() -> submarineWithPosAndDirection(zero, zero, north).sendInstructions("ddm"));
+		assertTrue(submarineWithPosAndDirection(zero, zero, north).getCapsuleState());
 	}
 	
 	@Test public void test25AssertNemoCanReceiveMultipleCommands() {
-		Submarine nemo = new Submarine(0,0,"North");
+		Submarine nemo = submarineWithPosAndDirection(zero, zero, north);
 		nemo.sendInstructions("udddrrlrff");
-		assertEquals(-3,nemo.getDepth().getValue());
-		assertArrayEquals(new int[]{0, -2},nemo.getPosition().getCoordinates());
-		assertEquals("South",nemo.getDirection().getValue());
+		assertEquals(minusThree,nemo.getDepth().getValue());
+		assertArrayEquals(zeroMinusTwo,nemo.getPosition().getCoordinates());
+		assertEquals(south,nemo.getDirection().getValue());
 	}
 	
 	@Test public void test26AssertNemoCanReceiveMultipleCommandsAndStopsWorkingWhenCapsuleIsReleasedAtWrongDepth() {
-		Submarine nemo = new Submarine(0,0,"North");
+		Submarine nemo = submarineWithPosAndDirection(zero, zero, north);
 		nemo.sendInstructions("udddrrlrff");
-		assertEquals(-3,nemo.getDepth().getValue());
-		assertArrayEquals(new int[]{0, -2},nemo.getPosition().getCoordinates());
-		assertEquals("South",nemo.getDirection().getValue());
-		assertThrowsLike("El submarino ha dejado de funcionar",() -> nemo.sendInstructions("ddm"));
+		assertEquals(minusThree,nemo.getDepth().getValue());
+		assertArrayEquals(zeroMinusTwo,nemo.getPosition().getCoordinates());
+		assertEquals(south,nemo.getDirection().getValue());
+		assertThrowsLike(BeyondMinusOne.elSubmarinoHaDejadoDeFuncionarError,() -> nemo.sendInstructions("ddm"));
 		assertTrue(nemo.getCapsuleState());
+	}
+	
+	private Submarine submarineWithPosAndDirection(int x, int y, String direction) {
+		Submarine nemo = new Submarine(x,y,direction);
+		return nemo;	
 	}
 	
 	  private void assertThrowsLike(String expectedMessage, ThrowingRunnable throwingRunnable) {
