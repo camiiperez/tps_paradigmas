@@ -1,14 +1,10 @@
 
 public class OnSurface extends Depth{
 	int value;
-	int i = 0 ;
 	
 	public OnSurface() {
 		depthHistory.clear();
-		value = 0;	
 		depthHistory.add(this);	
-		
-		
 	}
 	
 	public Depth ascend() {
@@ -24,7 +20,7 @@ public class OnSurface extends Depth{
 	}
 	
 	public int getValue() {
-		return value;
+		return 0;
 	}
 
 }

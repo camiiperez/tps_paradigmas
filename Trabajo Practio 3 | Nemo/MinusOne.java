@@ -3,7 +3,6 @@ public class MinusOne extends Depth{
 	int value;
 	
 	public MinusOne() {
-		value = -1;
 		depthHistory.add(this);
 	}
 	
@@ -21,7 +20,7 @@ public class MinusOne extends Depth{
 	}
 	
 	public int getValue() {
-		return value;
+		return -1;
 	}
 
 }

@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Direction {
+	
 	public static ArrayList<Direction> directions
 	= new ArrayList<>(Arrays.asList(new North(), new East(), new South(), new West()));
 	
@@ -20,7 +21,5 @@ public abstract class Direction {
 		            .findFirst()
 		            .orElse(null);  
 		    return directionToReturn;
-		
-		
 	}
 }

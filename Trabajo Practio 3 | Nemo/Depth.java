@@ -12,7 +12,6 @@ public abstract class Depth {
 	public abstract int getValue();
 
 	public static Depth actualDepth() {
-		Depth actualD = depthHistory.get(depthHistory.size() - 1);
-		return actualD;
+		return depthHistory.get(depthHistory.size() - 1);
 	}
 }

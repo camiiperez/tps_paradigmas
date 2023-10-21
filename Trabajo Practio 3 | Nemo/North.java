@@ -1,6 +1,7 @@
 
 public class North extends Direction {
 	static String value;
+	
 	public North() {
 		value = "North";
 	}
