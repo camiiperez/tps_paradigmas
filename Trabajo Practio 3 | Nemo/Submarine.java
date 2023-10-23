@@ -10,8 +10,6 @@ public class Submarine {
 	    depth = new OnSurface();
 	    direction = Direction.directionFor(directionSearched);
 	    isCapsuleInside = true;
-	    
-	
 	}
 
 	public Submarine sendInstructions(String commandsToFollow) {

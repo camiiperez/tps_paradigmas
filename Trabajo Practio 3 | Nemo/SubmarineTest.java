@@ -62,7 +62,7 @@ public class SubmarineTest {
 				submarineWithPosAndDirection(zero, zero, north).sendInstructions("dddd").getDepth().getValue());
 	}
 	
-	@Test public void test05AssertsNemoAscends() {
+	@Test public void test05AssertsNemoAscendsOnce() {
 		assertEquals(minusOne,
 				submarineWithPosAndDirection(zero, zero, north).sendInstructions("d").getDepth().getValue());
 		assertEquals(zero,
