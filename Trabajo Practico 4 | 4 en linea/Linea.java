@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Linea {
-	public static final String isTheWinner = " is the winner!";
 	public static final String fullColumnMessage = "This column is full!";
 	public static final String invalidMoveMessage = "Invalid move!";
-	public static final String noWinnerYetMessage = "There's no winner yet!";
-	public static final String tieMessage = "Tie!";
+
 	
-	static Turn turn;
+	static GameState gameState;
 	TypeOfGame typeOfGame;
 	List<List<Token>> board;
 	int height;
@@ -18,59 +18,59 @@ public class Linea {
 	int timesPlayed;
 	
 	public Linea(int width, int height, char variantOfTriumph) {
-		this.turn = new Red();
+		this.gameState = new RedTurn();
 		this.height = height;
 		this.width = width;
 		this.board = createBoard(width);
 		this.typeOfGame = TypeOfGame.typeOfGameFor(variantOfTriumph);
 		this.timesPlayed = 0;
 
-	}
-	
-	public String winner() {
-		if (typeOfGame.isThereAnyWin(this)) {
-			return getLastToken().getValue() + isTheWinner;
-		}
-		else if(isBoardFull()) {
-			return tieMessage;
-		}
-		return noWinnerYetMessage;
-	}
-	
+	}	
 
 	public boolean redsTurn() {
-		return this.turn instanceof Red;
+		return this.gameState instanceof RedTurn;
 	}
 
 	public boolean bluesTurn() {
-		return this.turn instanceof Blue;
+		return this.gameState instanceof BlueTurn;
 	}
 
 	public void playRedAt(int columnToPlay) {
-		isItAValidPlay(columnToPlay);
-		turn.shouldRedPlay();
+		gameState.playRedAt(columnToPlay,this);
 		
-		placeRedToken(columnToPlay);
-		
-		lastColumnPlayed = columnToPlay;
-		lastRowPlayed = board.get(columnToPlay - 1).size();
 		timesPlayed += 1;
 		
-		turn.changeTurn();
+		gameState.changeTurn();
 	
 	}
 
 	public void playBlueAt(int columnToPlay) {
-		isItAValidPlay(columnToPlay);
-		turn.shouldBluePlay();
-		
-		placeBlueToken(columnToPlay);
-		
-		lastColumnPlayed = columnToPlay;
-		lastRowPlayed = board.get(columnToPlay - 1).size();
+		gameState.playBlueAt(columnToPlay,this);
+	
 		timesPlayed += 1;
 		
-		turn.changeTurn();
+		gameState.changeTurn();
+	}
+	
+	void placeRedToken(int columnToPlay) {
+		isItAValidPlay(columnToPlay);
+		List<Token> column = board.get(columnToPlay - 1);
+		int columnSize = column.size();
+		board.get(columnToPlay - 1).add(new RedToken(columnToPlay,columnSize + 1,this));
+		lastColumnPlayed = columnToPlay;
+		lastRowPlayed = board.get(columnToPlay - 1).size();
+		updateGame();
+	}
+	
+	void placeBlueToken(int columnToPlay) {
+		isItAValidPlay(columnToPlay);
+		List<Token> column = board.get(columnToPlay - 1);
+		int columnSize = column.size();
+		board.get(columnToPlay - 1).add(new BlueToken(columnToPlay,columnSize + 1,this));
+		lastColumnPlayed = columnToPlay;
+		lastRowPlayed = board.get(columnToPlay - 1).size();
+		updateGame();
+		
 	}
 	
 	public boolean verticalWin() {
@@ -93,18 +93,15 @@ public class Linea {
 		return firstDiagonal >= 4 || secondDiagonal >= 4;
 	}
 
-	
-
-	private void placeRedToken(int columnToPlay) {
-		List<Token> column = board.get(columnToPlay - 1);
-		int columnSize = column.size();
-		board.get(columnToPlay - 1).add(new RedToken(columnToPlay,columnSize + 1,this));
-	}
-	
-	private void placeBlueToken(int columnToPlay) {
-		List<Token> column = board.get(columnToPlay - 1);
-		int columnSize = column.size();
-		board.get(columnToPlay - 1).add(new BlueToken(columnToPlay,columnSize + 1,this));
+	 private void updateGame() {
+		 if (typeOfGame.isThereAnyWin(this)) {
+				gameState = gameState.winner();
+				gameState.whosTheWinner();
+			}
+			else if(isBoardFull()) {
+				gameState = gameState.tied();
+				gameState.whosTheWinner();
+			}	
 	}
 	
 	private void isItAValidPlay(int columnToPlay) {
@@ -127,15 +124,10 @@ public class Linea {
 	}
 	
 	private List<List<Token>> createBoard(int width) {
-	    List<List<Token>> board = new ArrayList<>();
-	
-	    for (int i = 0; i < width; i++) {
-	        List<Token> row = new ArrayList<>();
-	        board.add(row);
-	    }
-	    
-	    return board;
-	}
+        return IntStream.range(0, width)
+                .mapToObj(i -> new ArrayList<Token>())
+                .collect(Collectors.toList());
+    }
 	
 	public String show() {
 	    StringBuilder boardString = new StringBuilder();
@@ -180,21 +172,18 @@ public class Linea {
 	}
 	
 	public boolean isBoardFull() {
-	    for (List<Token> column : board) {
-	        if (column.size() < height) {
-	            return false; 
-	        }
-	    }
-	    return true;
-	}
+        return board.stream().allMatch(column -> column.size() >= height);
+    }
 	
-	public static void setTurn(Turn turnToChange) {
-		turn = turnToChange;
+	public static void setGameState(GameState newGameState) {
+		gameState = newGameState;
 	}
 	
 	private Token getLastToken() {
 		return board.get(lastColumnPlayed - 1).get(lastRowPlayed - 1);
 	}
+
+	
 
 	
 

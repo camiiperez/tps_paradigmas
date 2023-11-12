@@ -7,9 +7,6 @@ import org.junit.Test;
 import org.junit.function.ThrowingRunnable;
 
 public class LineaTest {
-	private static final char blue = 'B';
-	private static final char red = 'R';
-
 	@Test
     public void test00BoardStartsEmpty() {
         for (int column = 0; column < 6; column++) {
@@ -28,6 +25,7 @@ public class LineaTest {
 		game.playRedAt(1);
 		
 		assertTrue(game.bluesTurn());
+		assertFalse(game.redsTurn());
 	}
 	
 	@Test
@@ -38,6 +36,7 @@ public class LineaTest {
 		game.playBlueAt(1);
 		
 		assertTrue(game.redsTurn());
+		assertFalse(game.bluesTurn());
 	}
 	
 	@Test
@@ -45,7 +44,7 @@ public class LineaTest {
 		Linea game = newFourInLineGameWith(6, 7, 'A');
 		game.playRedAt(1);
 		
-		assertThrowsLike(Turn.itsNotYourTurnMessage, () -> game.playRedAt(1));
+		assertThrowsLike(GameState.itsNotYourTurnMessage, () -> game.playRedAt(1));
 		assertTrue(game.bluesTurn());
 	}
 	
@@ -56,7 +55,7 @@ public class LineaTest {
 		
 		game.playBlueAt(1);
 		
-		assertThrowsLike(Turn.itsNotYourTurnMessage, () -> game.playBlueAt(1));
+		assertThrowsLike(GameState.itsNotYourTurnMessage, () -> game.playBlueAt(1));
 		assertTrue(game.redsTurn());
 	}
 	
@@ -112,12 +111,8 @@ public class LineaTest {
 		Linea game = newFourInLineGameWith(6, 7, 'A');
 		redFillsThreeRowsOnColumnOneAndBlueFillsThreeRowsInColumnTwo(game);
 		
-		assertFalse(game.finished());
-		
-		game.playRedAt(1);
-		
-		assertTrue(game.finished());
-		assertEquals(red + Linea.isTheWinner,game.winner());
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, RedTurn.redIsTheWinnerMessage, () -> game.playRedAt(1), () -> game.playBlueAt(2));
 	}
 	
 	@Test
@@ -126,27 +121,18 @@ public class LineaTest {
 		redFillsThreeRowsOnColumnOneAndBlueFillsThreeRowsInColumnTwo(game);
 		
 		game.playRedAt(3);
-		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(2);
-		
-		assertTrue(game.finished());
-		assertEquals(blue + Linea.isTheWinner,game.winner());
-		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, BlueTurn.blueIsTheWinnerMessage, () -> game.playBlueAt(2), () -> game.playRedAt(2));
 	}
 	
 	@Test
 	public void test13RedWinsHorizontallyInGameModeA() {
 		Linea game = newFourInLineGameWith(6, 7, 'A');
+		
 		redFillsFirstRowFromColumnOneToThreeAndBlueFillsSecondRowFromColumnOneToThree(game);
 		
-		assertFalse(game.finished());
-		
-		game.playRedAt(4);
-		
-		assertTrue(game.finished());
-		assertEquals(red + Linea.isTheWinner,game.winner());
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, RedTurn.redIsTheWinnerMessage, () -> game.playRedAt(4), () -> game.playBlueAt(2));
 	}
 	
 	@Test
@@ -154,259 +140,291 @@ public class LineaTest {
 		Linea game = newFourInLineGameWith(6, 7, 'A');
 		blueFillsFirstRowFromColumnTwoToFour(game);
 		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(5);
-		
-		assertTrue(game.finished());
-		assertEquals(blue + Linea.isTheWinner,game.winner());
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, BlueTurn.blueIsTheWinnerMessage, () -> game.playBlueAt(5), () -> game.playRedAt(2));
 	}
 	
 	@Test
-	public void test15RedDoesntWinDiagonallyInGameModeA() {
+	public void test15RedDoesntWinWithPositiveSlopeDiagonalInGameModeA() {
 		Linea game = newFourInLineGameWith(6, 7, 'A');
 		redFillsColumnsOneToThreeDiagonally(game);
 		
-		assertFalse(game.finished());
-		game.playRedAt(4);
-		assertFalse(game.finished());
-		
-		assertEquals(Linea.noWinnerYetMessage,game.winner());
-		
+		assertsGameHasntFinishedAndIsPossibleToKeepPlayingForRed(game, 4, 2);
 	}
 	
 	@Test
-	public void test16BlueDoesntWinDiagonallyInGameModeA() {
+	public void test16RedDoesntWinWithNegativeSlopeDiagonalInGameModeA() {
+		Linea game = newFourInLineGameWith(6, 7, 'A');
+		redFillsColumnsSixToFourDiagonallyBlueFillsColumnsFiveToThreeDiagonally(game);
+		
+		assertsGameHasntFinishedAndIsPossibleToKeepPlayingForRed(game, 3, 2);
+	}
+	
+	@Test
+	public void test17BlueDoesntWinWithPositiveSlopeDiagonalInGameModeA() {
 		Linea game = newFourInLineGameWith(6, 7, 'A');
 		blueFillsColumnsOneToThreeDiagonally(game);
 		
-		assertFalse(game.finished());
-		game.playBlueAt(4);
-		assertFalse(game.finished());
-		assertEquals(Linea.noWinnerYetMessage,game.winner());
+		assertsGameHasntFinishedAndIsPosibbleToKeepPlayingForBlue(game, 4, 2);
 	}
 	
 	@Test
-	public void test17GameFinishesIfBoardIsFullInGameModeA() {
+	public void test18BlueDoesntWinWithNegativeSlopeDiagonalInGameModeA() {
+		Linea game = newFourInLineGameWith(6, 7, 'A');
+		redFillsColumnsSixToFourDiagonallyBlueFillsColumnsFiveToThreeDiagonally(game);
+		
+		game.playRedAt(1);
+		
+		game.playBlueAt(2);
+		
+		game.playRedAt(2);
+		
+		assertsGameHasntFinishedAndIsPosibbleToKeepPlayingForBlue(game, 2, 2);
+		
+	}
+	
+	@Test
+	public void test19GameFinishesIfBoardIsFullInGameModeA() {
 		Linea game = newFourInLineGameWith(2,2,'A');
-		game.playRedAt(1);
-		
-		game.playBlueAt(2);
-		
-		game.playRedAt(1);
-		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(2);
-		
-		assertTrue(game.finished());
-		assertEquals(Linea.tieMessage,game.winner());
+		fillsBoardAndAssertsGameWithTieMessagesAreThrownGameFinishesAndItIsNotPossibleToKeepPlaying(game);
 	}
 	
 	@Test
-	public void test18RedDoesntWinVerticallyInGameModeB() {
+	public void test20RedDoesntWinVerticallyInGameModeB() {
 		Linea game = newFourInLineGameWith(6,7,'B');
 		redFillsThreeRowsOnColumnOneAndBlueFillsThreeRowsInColumnTwo(game);
 		
-		assertFalse(game.finished());
-		
-		game.playRedAt(1);
-		
-		assertFalse(game.finished());
-		assertEquals(Linea.noWinnerYetMessage,game.winner());
-		
+		assertsGameHasntFinishedAndIsPossibleToKeepPlayingForRed(game, 1, 2);
+
 	}
 	
 	@Test
-	public void test19BlueDoesntWinVerticallyInGameModeB() {
+	public void test21BlueDoesntWinVerticallyInGameModeB() {
 		Linea game = newFourInLineGameWith(6,7,'B');
 		redFillsThreeRowsOnColumnOneAndBlueFillsThreeRowsInColumnTwo(game);
 		
 		game.playRedAt(3);
 		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(2);
-		
-		assertFalse(game.finished());
-		assertEquals(Linea.noWinnerYetMessage,game.winner());
-		
+		assertsGameHasntFinishedAndIsPosibbleToKeepPlayingForBlue(game, 2, 2);
 	}
 	
 	@Test
-	public void test20RedDoesntWinHorizontallyInGameModeB() {
+	public void test22RedDoesntWinHorizontallyInGameModeB() {
 		Linea game = newFourInLineGameWith(6,7,'B');
 		redFillsFirstRowFromColumnOneToThreeAndBlueFillsSecondRowFromColumnOneToThree(game);
 		
-		assertFalse(game.finished());
-		
-		game.playRedAt(4);
-		
-		assertFalse(game.finished());
-		assertEquals(Linea.noWinnerYetMessage,game.winner());
-		
+		assertsGameHasntFinishedAndIsPossibleToKeepPlayingForRed(game, 4, 3);
 	}
 	
 	@Test
-	public void test21BlueDoesntWinHorizontallyInGameModeB() {
+	public void test23BlueDoesntWinHorizontallyInGameModeB() {
 		Linea game = newFourInLineGameWith(6,7,'B');
 		blueFillsFirstRowFromColumnTwoToFour(game);
 		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(5);
-		
-		assertFalse(game.finished());
-		assertEquals(Linea.noWinnerYetMessage,game.winner());
-		
+		assertsGameHasntFinishedAndIsPosibbleToKeepPlayingForBlue(game, 5, 2);
 	}
 	
 	@Test
-	public void test22RedWinsDiagonallyInGameModeB() {
+	public void test24RedWinsWithPositiveSlopeDiagonalInGameModeB() {
 		Linea game = newFourInLineGameWith(6,7,'B');
 		redFillsColumnsOneToThreeDiagonally(game);
 		
-		assertFalse(game.finished());
-		
-		game.playRedAt(4);
-		
-		assertTrue(game.finished());
-		assertEquals(red + Linea.isTheWinner,game.winner());
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, RedTurn.redIsTheWinnerMessage, () -> game.playRedAt(4), () -> game.playBlueAt(2));
 	}
 	
 	@Test
-	public void test23BlueWinsDiagonallyInGameModeB() {
+	public void test25RedWinsWithNegativeSlopeDiagonalInGameModeB() {
+		Linea game = newFourInLineGameWith(6, 7, 'B');
+		redFillsColumnsSixToFourDiagonallyBlueFillsColumnsFiveToThreeDiagonally(game);
+		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, RedTurn.redIsTheWinnerMessage, () -> game.playRedAt(3), () -> game.playBlueAt(2));
+	}
+	
+	@Test
+	public void test26BlueWinsPositiveSlopeDiagonalInGameModeB() {
 		Linea game = newFourInLineGameWith(6,7,'B');
 		blueFillsColumnsOneToThreeDiagonally(game);
 		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(4);
-		
-		assertTrue(game.finished());
-		assertEquals(blue + Linea.isTheWinner,game.winner());
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, BlueTurn.blueIsTheWinnerMessage, () -> game.playBlueAt(4), () -> game.playRedAt(2));
 	}
 	
 	@Test
-	public void test24GameFinishesIfBoardIsFullInGameModeB() {
+	public void test27BlueWinsNegativeSlopeDiagonalInGameModeB() {
+		Linea game = newFourInLineGameWith(6, 7, 'B');
+		redFillsColumnsSixToFourDiagonallyBlueFillsColumnsFiveToThreeDiagonally(game);
+		
+		game.playRedAt(1);
+		
+		game.playBlueAt(2);
+		
+		game.playRedAt(2);
+		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, BlueTurn.blueIsTheWinnerMessage, () -> game.playBlueAt(2), () -> game.playRedAt(2));
+	}
+	
+	@Test
+	public void test28GameFinishesIfBoardIsFullInGameModeB() {
 		Linea game = newFourInLineGameWith(2,2,'B');
-		game.playRedAt(1);
-		
-		game.playBlueAt(2);
-		
-		game.playRedAt(1);
-		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(2);
-		
-		assertTrue(game.finished());
-		assertEquals(Linea.tieMessage,game.winner());
+		fillsBoardAndAssertsGameWithTieMessagesAreThrownGameFinishesAndItIsNotPossibleToKeepPlaying(game);
 	}
 	
 	@Test
-	public void test25RedWinsVerticallyInGameModeC() {
+	public void test29RedWinsVerticallyInGameModeC() {
 		Linea game = newFourInLineGameWith(6,7,'C');
 		redFillsThreeRowsOnColumnOneAndBlueFillsThreeRowsInColumnTwo(game);
 		
-		assertFalse(game.finished());
-		
-		game.playRedAt(1);
-		
-		assertTrue(game.finished());
-		assertEquals(red + Linea.isTheWinner,game.winner());
-		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, RedTurn.redIsTheWinnerMessage, () -> game.playRedAt(1), () -> game.playBlueAt(2));
 	}
 	
 	@Test
-	public void test26BlueWinsVerticallyInGameModeC() {
+	public void test30BlueWinsVerticallyInGameModeC() {
 		Linea game = newFourInLineGameWith(6,7,'C');
 		redFillsThreeRowsOnColumnOneAndBlueFillsThreeRowsInColumnTwo(game);
 		
 		game.playRedAt(3);
 		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(2);
-		
-		assertTrue(game.finished());
-		assertEquals(blue + Linea.isTheWinner,game.winner());
-		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, BlueTurn.blueIsTheWinnerMessage, () -> game.playBlueAt(2), () -> game.playRedAt(2));
 	}
 	
 	@Test
-	public void test27RedWinsHorizontallyInGameModeC() {
+	public void test31RedWinsHorizontallyInGameModeC() {
 		Linea game = newFourInLineGameWith(6,7,'C');
 		redFillsFirstRowFromColumnOneToThreeAndBlueFillsSecondRowFromColumnOneToThree(game);
 		
-		assertFalse(game.finished());
-		
-		game.playRedAt(4);
-		
-		assertTrue(game.finished());
-		assertEquals(red + Linea.isTheWinner,game.winner());
-		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, RedTurn.redIsTheWinnerMessage, () -> game.playRedAt(4), () -> game.playBlueAt(2));
 	}
 	
 	@Test
-	public void test28BlueWinsHorizontallyInGameModeC() {
+	public void test32BlueWinsHorizontallyInGameModeC() {
 		Linea game = newFourInLineGameWith(6,7,'C');
 		blueFillsFirstRowFromColumnTwoToFour(game);
 		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(5);
-		
-		assertTrue(game.finished());
-		assertEquals(blue + Linea.isTheWinner,game.winner());
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, BlueTurn.blueIsTheWinnerMessage, () -> game.playBlueAt(5), () -> game.playRedAt(2));
 	}
 	
 	@Test
-	public void test29RedWinsDiagonallyInGameModeC() {
+	public void test33RedWinsPositiveSlopeDiagonalInGameModeC() {
 		Linea game = newFourInLineGameWith(6,7,'C');
 		redFillsColumnsOneToThreeDiagonally(game);
 		
-		assertFalse(game.finished());
-		game.playRedAt(4);
-		assertTrue(game.finished());
-		assertEquals(red + Linea.isTheWinner,game.winner());
-		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, RedTurn.redIsTheWinnerMessage, () -> game.playRedAt(4), () -> game.playBlueAt(2));
 	}
 	
 	@Test
-	public void test30BlueWinsDiagonallyInGameModeC() {
+	public void test34RedWinsNegativeSlopeDiagonalInGameModeC() {
+		Linea game = newFourInLineGameWith(6, 7, 'C');
+		redFillsColumnsSixToFourDiagonallyBlueFillsColumnsFiveToThreeDiagonally(game);
+		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, RedTurn.redIsTheWinnerMessage, () -> game.playRedAt(3), () -> game.playBlueAt(2));
+	}
+	
+	@Test
+	public void test35BlueWinsPositiveSlopeDiagonalInGameModeC() {
 		Linea game = newFourInLineGameWith(6,7,'C');
 		blueFillsColumnsOneToThreeDiagonally(game);
 		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(4);
-		
-		assertTrue(game.finished());
-		assertEquals(blue + Linea.isTheWinner,game.winner());
-		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, BlueTurn.blueIsTheWinnerMessage, () -> game.playBlueAt(4), () -> game.playRedAt(2));
 	}
 	
 	@Test
-	public void test31GameFinishesIfBoardIsFullInGameModeC() {
+	public void test36BlueWinsNegativeSlopeDiagonalInGameModeC() {
+		Linea game = newFourInLineGameWith(6, 7, 'C');
+		redFillsColumnsSixToFourDiagonallyBlueFillsColumnsFiveToThreeDiagonally(game);
+		
+		game.playRedAt(1);
+		
+		game.playBlueAt(2);
+		
+		game.playRedAt(2);
+		
+		assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying
+		(game, BlueTurn.blueIsTheWinnerMessage, () -> game.playBlueAt(2), () -> game.playRedAt(2));
+	}
+	
+	@Test
+	public void test37GameFinishesIfBoardIsFullInGameModeC() {
 		Linea game = newFourInLineGameWith(2,2,'C');
-		game.playRedAt(1);
-		
-		game.playBlueAt(2);
-		
-		game.playRedAt(1);
-		
-		assertFalse(game.finished());
-		
-		game.playBlueAt(2);
-		
-		assertTrue(game.finished());
-		assertEquals(Linea.tieMessage,game.winner());
+		fillsBoardAndAssertsGameWithTieMessagesAreThrownGameFinishesAndItIsNotPossibleToKeepPlaying(game);
 	}
 	
 	private Linea newFourInLineGameWith(int width, int height, char typeOfGame) {
 		Linea game = new Linea(width,height,typeOfGame);
 		return game;
+	}
+	
+	private void fillsBoardAndAssertsGameWithTieMessagesAreThrownGameFinishesAndItIsNotPossibleToKeepPlaying(Linea game) {
+		game.playRedAt(1);	
+		
+		game.playBlueAt(2);
+		
+		game.playRedAt(1);
+		
+		assertFalse(game.finished());
+		
+		assertThrowsLike(GameEndedWithTie.theGameEndedWithATieMessage,() ->game.playBlueAt(2));
+		
+		assertTrue(game.finished());
+		
+		assertThrowsLike(GameEndedWithTie.gameEndedWithATieYouCannotPlayMessage, () -> game.playRedAt(2));
+	}
+	
+	private void assertsGameHasntFinishedAndIsPosibbleToKeepPlayingForBlue(Linea game, int apparentWinnerMove, int nextMove) {
+		assertFalse(game.finished());
+		game.playBlueAt(apparentWinnerMove);
+		assertFalse(game.finished());
+		
+		game.playRedAt(nextMove);
+	}
+	
+	private void assertsGameHasntFinishedAndIsPossibleToKeepPlayingForRed(Linea game, int apparentWinnerMove, int nextMove) {
+		assertFalse(game.finished());
+		game.playRedAt(apparentWinnerMove);	
+		assertFalse(game.finished());
+		
+		game.playBlueAt(nextMove);
+	}
+	
+	private void assertsGameFinishesExceptionsAreThrownAndItsNotPossibleToKeepPlaying(Linea game, String messageExpected, ThrowingRunnable winnersPlay, ThrowingRunnable illegalPlay) {
+		assertFalse(game.finished());
+		
+		assertThrowsLike(messageExpected,winnersPlay);
+		
+		assertTrue(game.finished());
+		
+		assertThrowsLike(GameEndedWithWinner.theresAWinnerYouCannotPlayMessage,illegalPlay);
+	}
+	
+	private void redFillsColumnsSixToFourDiagonallyBlueFillsColumnsFiveToThreeDiagonally(Linea game) {
+		game.playRedAt(6);
+		
+		game.playBlueAt(5);
+		
+		game.playRedAt(5);
+		
+		game.playBlueAt(4);
+		
+		game.playRedAt(3);
+		
+		game.playBlueAt(4);
+		
+		game.playRedAt(4);
+		
+		game.playBlueAt(2);
+		
+		game.playRedAt(3);
+		
+		game.playBlueAt(3);
 	}
 	
 	private void blueFillsColumnsOneToThreeDiagonally(Linea game) {
